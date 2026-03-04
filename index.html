@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Farine — Toko Roti Artisan</title>
+  <meta name="description" content="Roti artisan segar setiap hari. Dibuat dengan cinta dan bahan-bahan terbaik pilihan." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #FBF5E6;
+      --warm-white: #FEFCF7;
+      --brown-deep: #2C1A0E;
+      --brown-mid: #5C3D1E;
+      --brown-light: #9B6A3C;
+      --gold: #C8922A;
+      --gold-light: #E8B84B;
+      --rose: #D4736A;
+      --green: #4A7C59;
+      --text-dark: #1A0F08;
+      --text-mid: #4A2C1A;
+      --text-light: #8B6145;
+      --border: rgba(92,61,30,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--warm-white);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── CURSOR ── */
+    * { cursor: none; }
+    #cursor {
+      position: fixed; z-index: 9999;
+      width: 12px; height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      transition: transform 0.15s ease, width 0.2s, height 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    #cursor-ring {
+      position: fixed; z-index: 9998;
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      transition: transform 0.35s ease, width 0.3s, height 0.3s, opacity 0.3s;
+      transform: translate(-50%, -50%);
+      opacity: 0.6;
+    }
+    body:has(a:hover, button:hover) #cursor { transform: translate(-50%,-50%) scale(2); background: var(--rose); }
+    body:has(a:hover, button:hover) #cursor-ring { width: 54px; height: 54px; opacity: 0.3; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 72px;
+      background: transparent;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(251,245,230,0.96);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 24px rgba(44,26,14,0.08);
+    }
+    .nav-logo {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: var(--brown-deep);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.5rem; align-items: center; list-style: none; }
+    .nav-links a {
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brown-mid);
+      text-decoration: none;
+      font-weight: 700;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1.5px; background: var(--gold);
+      transform: scaleX(0); transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+    .nav-cart {
+      position: relative;
+      background: var(--brown-deep);
+      color: var(--cream);
+      border: none;
+      padding: 10px 22px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.25s;
+    }
+    .nav-cart:hover { background: var(--gold); }
+    .cart-badge {
+      position: absolute; top: -6px; right: -6px;
+      background: var(--rose); color: white;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      font-size: 0.65rem;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--brown-deep); transition: 0.3s; }
+
+    /* ── HERO ── */
+    #hero {
+      height: 100vh; min-height: 600px;
+      position: relative;
+      display: flex; align-items: center;
+      overflow: hidden;
+      background: var(--cream);
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(200,146,42,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 80% at 90% 20%, rgba(212,115,106,0.08) 0%, transparent 50%),
+        linear-gradient(160deg, #FBF5E6 30%, #F5E8C8 100%);
+    }
+    .hero-grain {
+      position: absolute; inset: 0; opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 5vw;
+      max-width: 680px;
+      animation: heroIn 1.2s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes heroIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-tag {
+      font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); font-weight: 700;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 1.5rem;
+      animation: heroIn 1s 0.1s both;
+    }
+    .hero-tag::before { content: ''; width: 36px; height: 1.5px; background: var(--gold); }
+    h1.hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 1.08;
+      color: var(--brown-deep);
+      margin-bottom: 1.5rem;
+      animation: heroIn 1s 0.2s both;
+    }
+    h1.hero-title em { font-style: italic; color: var(--gold); }
+    .hero-desc {
+      font-size: 1.05rem; color: var(--text-light);
+      line-height: 1.75; max-width: 480px;
+      margin-bottom: 2.5rem;
+      animation: heroIn 1s 0.35s both;
+      font-weight: 300;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: heroIn 1s 0.5s both;
+    }
+    .btn-primary {
+      background: var(--brown-deep); color: var(--cream);
+      padding: 15px 36px; border: none;
+      font-family: 'Lato', sans-serif; font-weight: 700;
+      font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold); transform: translateY(-2px); }
+    .btn-secondary {
+      background: transparent; color: var(--brown-deep);
+      padding: 14px 36px;
+      border: 1.5px solid var(--brown-deep);
+      font-family: 'Lato', sans-serif; font-weight: 700;
+      font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.25s;
+      display: inline-block;
+    }
+    .btn-secondary:hover { background: var(--brown-deep); color: var(--cream); }
+    .hero-visual {
+      position: absolute; right: -2vw; top: 50%;
+      transform: translateY(-50%);
+      width: 48vw; max-width: 640px;
+      animation: heroIn 1.2s 0.3s both;
+    }
+    .hero-visual svg { width: 100%; }
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-light);
+      animation: heroIn 1s 0.8s both;
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:0.4;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.1)} }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      background: var(--brown-deep); overflow: hidden;
+      padding: 14px 0;
+    }
+    .marquee-track {
+      display: flex; gap: 0;
+      animation: marquee 30s linear infinite;
+      white-space: nowrap;
+    }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .marquee-item {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem; font-style: italic;
+      color: var(--gold-light); letter-spacing: 0.08em;
+      padding: 0 2.5rem;
+      flex-shrink: 0;
+    }
+    .marquee-dot { color: var(--rose); }
+
+    /* ── SECTIONS COMMON ── */
+    section { padding: 7rem 5vw; }
+    .section-tag {
+      font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); font-weight: 700;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 1rem;
+    }
+    .section-tag::before { content: ''; width: 28px; height: 1.5px; background: var(--gold); }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: var(--brown-deep); line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .section-desc {
+      color: var(--text-light); line-height: 1.75;
+      font-weight: 300; font-size: 1rem;
+      max-width: 560px;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--cream); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6rem; align-items: center; max-width: 1200px; margin: 0 auto;
+    }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-frame {
+      width: 100%; padding-top: 120%;
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, var(--brown-light) 0%, var(--brown-deep) 100%);
+    }
+    .about-img-inner {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .about-img-deco {
+      position: absolute; bottom: -24px; right: -24px;
+      width: 180px; height: 180px;
+      border: 2px solid var(--gold);
+      z-index: -1;
+    }
+    .about-stats {
+      display: flex; gap: 2rem; margin-top: 2.5rem;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem; color: var(--brown-deep); font-weight: 700;
+    }
+    .stat-label {
+      font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-light); margin-top: 4px;
+    }
+    .about-list { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .about-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      color: var(--text-mid); font-size: 0.95rem; line-height: 1.6; list-style: none;
+    }
+    .about-list li::before {
+      content: '✦'; color: var(--gold); flex-shrink: 0; margin-top: 2px; font-size: 0.7rem;
+    }
+
+    /* ── MENU / PRODUCTS ── */
+    #menu { background: var(--warm-white); }
+    .menu-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 3rem; max-width: 1200px; margin-left: auto; margin-right: auto;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .menu-filters {
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: transparent; border: 1.5px solid var(--border);
+      padding: 8px 20px; font-family: 'Lato', sans-serif;
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-light);
+      transition: all 0.25s;
+      border-radius: 2px;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--brown-deep); color: var(--cream); border-color: var(--brown-deep);
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .product-card {
+      background: var(--cream);
+      position: relative;
+      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s;
+      overflow: hidden;
+    }
+    .product-card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(44,26,14,0.12); }
+    .product-img {
+      width: 100%; aspect-ratio: 4/3;
+      background: linear-gradient(135deg, #E8C89A 0%, #C8922A 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      font-size: 4rem;
+    }
+    .product-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--rose); color: white;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 4px 10px;
+    }
+    .product-info { padding: 1.4rem; }
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: var(--brown-deep);
+      margin-bottom: 0.4rem;
+    }
+    .product-desc { font-size: 0.85rem; color: var(--text-light); line-height: 1.6; margin-bottom: 1rem; font-weight: 300; }
+    .product-footer { display: flex; justify-content: space-between; align-items: center; }
+    .product-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; color: var(--gold); font-weight: 700;
+    }
+    .add-cart-btn {
+      background: var(--brown-deep); color: var(--cream);
+      border: none; padding: 8px 18px;
+      font-family: 'Lato', sans-serif; font-size: 0.75rem;
+      font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: background 0.25s, transform 0.2s;
+      border-radius: 2px;
+    }
+    .add-cart-btn:hover { background: var(--gold); transform: scale(1.05); }
+    .add-cart-btn.added { background: var(--green); }
+
+    /* ── FEATURED BANNER ── */
+    #featured {
+      background: var(--brown-deep);
+      padding: 6rem 5vw;
+      position: relative; overflow: hidden;
+    }
+    #featured::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(200,146,42,0.15) 0%, transparent 60%);
+    }
+    .featured-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+    .featured-tag {
+      font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold-light); font-weight: 700;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 1rem;
+    }
+    .featured-tag::before { content: ''; width: 28px; height: 1.5px; background: var(--gold-light); }
+    .featured-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--cream); line-height: 1.15; margin-bottom: 1.2rem;
+    }
+    .featured-title em { font-style: italic; color: var(--gold-light); }
+    .featured-desc { color: rgba(251,245,230,0.65); line-height: 1.75; font-weight: 300; margin-bottom: 2rem; }
+    .featured-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem; color: var(--gold-light); font-weight: 700;
+      margin-bottom: 2rem;
+    }
+    .featured-price span { font-size: 1rem; color: rgba(251,245,230,0.5); text-decoration: line-through; margin-left: 12px; font-family: 'Lato'; font-weight: 300; }
+    .btn-gold {
+      background: var(--gold); color: var(--brown-deep);
+      padding: 15px 36px; border: none;
+      font-family: 'Lato', sans-serif; font-weight: 700;
+      font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+      transition: background 0.25s, transform 0.2s;
+      display: inline-block; text-decoration: none;
+    }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .featured-visual {
+      display: flex; justify-content: center; align-items: center;
+    }
+    .bread-circle {
+      width: 340px; height: 340px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #E8B84B, #C8922A 50%, #8B4513 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8rem; position: relative;
+      box-shadow: 0 0 0 20px rgba(200,146,42,0.1), 0 0 0 40px rgba(200,146,42,0.05);
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { background: var(--cream); }
+    .testimonials-header { text-align: center; margin-bottom: 3.5rem; }
+    .testimonials-header .section-tag { justify-content: center; }
+    .testimonials-header .section-tag::before { display: none; }
+    .testimonials-header .section-desc { margin: 0 auto; text-align: center; }
+    .reviews-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem; max-width: 1200px; margin: 0 auto;
+    }
+    .review-card {
+      background: var(--warm-white); padding: 2rem;
+      position: relative;
+      transition: transform 0.3s;
+    }
+    .review-card:hover { transform: translateY(-4px); }
+    .review-quote {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 3rem; color: var(--gold); line-height: 1;
+      margin-bottom: 0.5rem; opacity: 0.4;
+    }
+    .review-text {
+      font-size: 0.95rem; color: var(--text-mid); line-height: 1.75;
+      margin-bottom: 1.5rem; font-weight: 300;
+    }
+    .review-author { display: flex; align-items: center; gap: 12px; }
+    .review-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-light), var(--brown-light));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: var(--cream); font-size: 1rem;
+    }
+    .review-name { font-weight: 700; color: var(--brown-deep); font-size: 0.9rem; }
+    .review-stars { color: var(--gold); font-size: 0.75rem; letter-spacing: 2px; }
+
+    /* ── ORDER SECTION ── */
+    #order { background: var(--warm-white); }
+    .order-grid {
+      display: grid; grid-template-columns: 1fr 1.2fr;
+      gap: 5rem; max-width: 1100px; margin: 0 auto; align-items: start;
+    }
+    .order-info .section-desc { margin-bottom: 2rem; }
+    .order-benefits { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2rem; }
+    .benefit-item { display: flex; align-items: flex-start; gap: 16px; }
+    .benefit-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--cream); border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .benefit-title { font-weight: 700; color: var(--brown-deep); font-size: 0.9rem; margin-bottom: 3px; }
+    .benefit-desc { font-size: 0.83rem; color: var(--text-light); line-height: 1.5; }
+    .order-form-wrap {
+      background: var(--cream); padding: 2.5rem;
+      box-shadow: 0 4px 40px rgba(44,26,14,0.06);
+    }
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; color: var(--brown-deep);
+      margin-bottom: 1.8rem;
+    }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-label {
+      display: block; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-mid); margin-bottom: 6px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid var(--border); background: var(--warm-white);
+      font-family: 'Lato', sans-serif; font-size: 0.9rem;
+      color: var(--text-dark);
+      transition: border-color 0.2s;
+      outline: none; appearance: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .submit-btn {
+      width: 100%; background: var(--brown-deep); color: var(--cream);
+      border: none; padding: 15px;
+      font-family: 'Lato', sans-serif; font-weight: 700;
+      font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase;
+      transition: background 0.25s;
+      margin-top: 0.5rem;
+    }
+    .submit-btn:hover { background: var(--gold); }
+    .form-success {
+      display: none; text-align: center; padding: 2rem;
+    }
+    .form-success .checkmark { font-size: 3rem; margin-bottom: 1rem; }
+    .form-success p { color: var(--text-mid); }
+
+    /* ── CART SIDEBAR ── */
+    #cart-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(26,15,8,0.5);
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    #cart-overlay.open { opacity: 1; pointer-events: all; }
+    #cart-sidebar {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 1001;
+      width: 420px; max-width: 100vw;
+      background: var(--warm-white);
+      transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+      display: flex; flex-direction: column;
+      box-shadow: -8px 0 60px rgba(44,26,14,0.12);
+    }
+    #cart-sidebar.open { transform: translateX(0); }
+    .cart-header {
+      padding: 1.5rem 1.8rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .cart-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; color: var(--brown-deep);
+    }
+    .cart-close { background: none; border: none; font-size: 1.5rem; color: var(--text-light); }
+    .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem 1.8rem; }
+    .cart-empty {
+      text-align: center; padding: 3rem 0;
+      color: var(--text-light); font-size: 0.95rem;
+    }
+    .cart-empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+    .cart-item {
+      display: flex; gap: 1rem; padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-item-img {
+      width: 70px; height: 70px;
+      background: linear-gradient(135deg, #E8C89A, #C8922A);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; flex-shrink: 0;
+    }
+    .cart-item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: var(--brown-deep); margin-bottom: 4px;
+    }
+    .cart-item-price { color: var(--gold); font-weight: 700; font-size: 0.9rem; }
+    .cart-qty {
+      display: flex; align-items: center; gap: 10px; margin-top: 6px;
+    }
+    .qty-btn {
+      width: 26px; height: 26px;
+      background: var(--cream); border: 1px solid var(--border);
+      font-size: 1rem; display: flex; align-items: center; justify-content: center;
+      color: var(--brown-mid); font-weight: 700;
+    }
+    .qty-btn:hover { background: var(--brown-deep); color: var(--cream); border-color: var(--brown-deep); }
+    .qty-num { font-weight: 700; color: var(--text-dark); min-width: 20px; text-align: center; }
+    .cart-item-remove { margin-left: auto; background: none; border: none; color: var(--rose); font-size: 0.8rem; }
+    .cart-footer {
+      padding: 1.5rem 1.8rem;
+      border-top: 1px solid var(--border);
+    }
+    .cart-total {
+      display: flex; justify-content: space-between;
+      font-family: 'Playfair Display', serif; font-size: 1.3rem;
+      color: var(--brown-deep); margin-bottom: 1.2rem;
+    }
+    .checkout-btn {
+      width: 100%; background: var(--brown-deep); color: var(--cream);
+      border: none; padding: 15px;
+      font-family: 'Lato', sans-serif; font-weight: 700;
+      font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase;
+      transition: background 0.25s;
+    }
+    .checkout-btn:hover { background: var(--gold); }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--brown-deep); color: var(--cream);
+      padding: 12px 28px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em;
+      border-radius: 2px; z-index: 2000;
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.4s;
+      opacity: 0; pointer-events: none;
+      display: flex; align-items: center; gap: 10px;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--brown-deep); color: rgba(251,245,230,0.6);
+      padding: 5rem 5vw 2rem;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem; max-width: 1200px; margin: 0 auto;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(251,245,230,0.1);
+    }
+    .footer-brand .nav-logo { font-size: 2.2rem; display: block; margin-bottom: 1rem; color: var(--cream); }
+    .footer-brand p { font-size: 0.88rem; line-height: 1.7; max-width: 260px; }
+    .footer-socials { display: flex; gap: 10px; margin-top: 1.5rem; }
+    .social-link {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(251,245,230,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; color: rgba(251,245,230,0.6);
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+    .social-link:hover { background: var(--gold); border-color: var(--gold); color: var(--brown-deep); }
+    .footer-col h4 {
+      font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--cream); font-weight: 700; margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col ul a {
+      font-size: 0.88rem; color: rgba(251,245,230,0.55);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--gold-light); }
+    .footer-bottom {
+      max-width: 1200px; margin: 2rem auto 0;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom a { color: rgba(251,245,230,0.4); text-decoration: none; }
+
+    /* ── ANIMATIONS ON SCROLL ── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-grid, .order-grid, .featured-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-visual { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; gap: 1.5rem;
+        position: fixed; inset: 0; top: 72px;
+        background: rgba(251,245,230,0.97);
+        backdrop-filter: blur(12px);
+        padding: 3rem 5vw; z-index: 800;
+        align-items: flex-start;
+      }
+      .nav-links a { font-size: 1.2rem; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 600px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      #cart-sidebar { width: 100vw; }
+      .about-stats { justify-content: space-between; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- TOAST -->
+<div id="toast">🛒 Ditambahkan ke keranjang!</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">La <span>Farine</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">Tentang</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#featured">Spesial</a></li>
+    <li><a href="#testimonials">Ulasan</a></li>
+    <li><a href="#order">Pesan</a></li>
+  </ul>
+  <button class="nav-cart" onclick="toggleCart()">
+    🛒 Keranjang
+    <span class="cart-badge" id="cart-badge">0</span>
+  </button>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <p class="hero-tag">Toko Roti Artisan — Sejak 2010</p>
+    <h1 class="hero-title">Roti Segar,<br>Setiap <em>Hari</em></h1>
+    <p class="hero-desc">Dibuat dengan tangan oleh pembuat roti berpengalaman. Tepung premium, bahan lokal pilihan, dipanggang dengan cinta setiap pagi sebelum fajar.</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn-primary">Lihat Menu</a>
+      <a href="#order" class="btn-secondary">Pesan Sekarang</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="breadGrad" cx="35%" cy="35%">
+          <stop offset="0%" stop-color="#F5D78A"/>
+          <stop offset="50%" stop-color="#C8922A"/>
+          <stop offset="100%" stop-color="#7A3A10"/>
+        </radialGradient>
+        <filter id="shadow"><feDropShadow dx="0" dy="20" stdDeviation="20" flood-opacity="0.15"/></filter>
+      </defs>
+      <!-- Plate -->
+      <ellipse cx="250" cy="430" rx="180" ry="18" fill="rgba(92,61,30,0.08)"/>
+      <!-- Baguette -->
+      <g filter="url(#shadow)">
+        <ellipse cx="250" cy="300" rx="60" ry="160" fill="url(#breadGrad)" transform="rotate(-20 250 300)"/>
+        <line x1="200" y1="220" x2="230" y2="240" stroke="#8B5E2A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="215" y1="250" x2="245" y2="270" stroke="#8B5E2A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="228" y1="280" x2="258" y2="300" stroke="#8B5E2A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      </g>
+      <!-- Round bread -->
+      <g filter="url(#shadow)">
+        <circle cx="360" cy="340" r="70" fill="url(#breadGrad)"/>
+        <path d="M330 310 Q360 290 390 310" fill="none" stroke="#7A3A10" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+        <circle cx="360" cy="340" r="70" fill="none" stroke="#F5D78A" stroke-width="1" opacity="0.2"/>
+      </g>
+      <!-- Croissant shape -->
+      <g filter="url(#shadow)" transform="translate(110,330)">
+        <path d="M0,40 Q30,-20 70,0 Q100,20 90,50 Q70,80 40,70 Q10,60 0,40Z" fill="#E8B060"/>
+        <path d="M20,35 Q50,-5 75,10" fill="none" stroke="#C8922A" stroke-width="2" opacity="0.5"/>
+      </g>
+      <!-- Decorative wheat -->
+      <g opacity="0.2" transform="translate(40,80)">
+        <line x1="0" y1="100" x2="0" y2="0" stroke="#C8922A" stroke-width="2"/>
+        <ellipse cx="0" cy="80" rx="8" ry="14" fill="#C8922A" transform="rotate(-20 0 80)"/>
+        <ellipse cx="0" cy="60" rx="8" ry="14" fill="#C8922A" transform="rotate(20 0 60)"/>
+        <ellipse cx="0" cy="40" rx="8" ry="14" fill="#C8922A" transform="rotate(-15 0 40)"/>
+        <ellipse cx="0" cy="22" rx="8" ry="14" fill="#C8922A"/>
+      </g>
+      <!-- Stars -->
+      <circle cx="80" cy="160" r="3" fill="#C8922A" opacity="0.3"/>
+      <circle cx="440" cy="120" r="5" fill="#C8922A" opacity="0.2"/>
+      <circle cx="420" cy="200" r="2" fill="#E8B060" opacity="0.4"/>
+    </svg>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item">🌾 Tepung Pilihan</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🧈 Bahan Lokal</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🔥 Dipanggang Segar</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🍞 Roti Artisan</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">☕ Nikmati Tiap Pagi</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🎂 Kue Spesial</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🥐 Croissant Premium</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🌾 Tepung Pilihan</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🧈 Bahan Lokal</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🔥 Dipanggang Segar</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🍞 Roti Artisan</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">☕ Nikmati Tiap Pagi</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🎂 Kue Spesial</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">🥐 Croissant Premium</span>
+    <span class="marquee-item marquee-dot">✦</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <div class="about-img-frame">
+        <div class="about-img-inner">
+          <svg viewBox="0 0 300 360" xmlns="http://www.w3.org/2000/svg" style="width:85%; opacity:0.9">
+            <defs>
+              <radialGradient id="g2" cx="40%" cy="35%">
+                <stop offset="0%" stop-color="#F5D78A"/>
+                <stop offset="60%" stop-color="#C8922A"/>
+                <stop offset="100%" stop-color="#5C2D0A"/>
+              </radialGradient>
+            </defs>
+            <!-- Baker silhouette simplified -->
+            <rect x="80" y="60" width="140" height="200" rx="8" fill="rgba(255,255,255,0.05)"/>
+            <!-- Oven -->
+            <rect x="40" y="240" width="220" height="100" rx="4" fill="rgba(92,61,30,0.4)"/>
+            <rect x="55" y="255" width="185" height="70" rx="3" fill="rgba(200,146,42,0.2)"/>
+            <circle cx="150" cy="290" r="30" fill="url(#g2)" opacity="0.8"/>
+            <text x="150" y="298" text-anchor="middle" font-size="30">🍞</text>
+            <!-- Steam -->
+            <path d="M120,235 Q125,215 120,195" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M150,228 Q155,205 150,185" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M180,235 Q185,215 180,195" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="about-img-deco"></div>
+    </div>
+    <div>
+      <p class="section-tag reveal">Kisah Kami</p>
+      <h2 class="section-title reveal reveal-delay-1">Keahlian Turun<br><em>Temurun</em></h2>
+      <p class="section-desc reveal reveal-delay-2">La Farine lahir dari cinta mendalam terhadap seni membuat roti. Dimulai dari dapur kecil di Palangkaraya, kami telah melayani keluarga-keluarga dengan roti segar berkualitas tinggi selama lebih dari satu dekade.</p>
+      <ul class="about-list reveal reveal-delay-3">
+        <li>Adonan difermentasi selama 24 jam untuk rasa yang kaya dan tekstur sempurna</li>
+        <li>Dipanggang dalam oven batu tradisional setiap hari mulai pukul 4 pagi</li>
+        <li>Menggunakan tepung lokal pilihan dan bahan-bahan tanpa pengawet</li>
+        <li>Resep autentik yang terinspirasi dari teknik boulangerie Prancis</li>
+      </ul>
+      <div class="about-stats reveal reveal-delay-4">
+        <div class="stat">
+          <div class="stat-num">15+</div>
+          <div class="stat-label">Tahun</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">40+</div>
+          <div class="stat-label">Varian Roti</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">2K+</div>
+          <div class="stat-label">Pelanggan</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">★4.9</div>
+          <div class="stat-label">Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="menu-header">
+    <div>
+      <p class="section-tag">Menu Pilihan</p>
+      <h2 class="section-title">Koleksi <em>Roti</em> Kami</h2>
+    </div>
+    <div class="menu-filters">
+      <button class="filter-btn active" onclick="filterProducts('all', this)">Semua</button>
+      <button class="filter-btn" onclick="filterProducts('roti', this)">Roti</button>
+      <button class="filter-btn" onclick="filterProducts('kue', this)">Kue</button>
+      <button class="filter-btn" onclick="filterProducts('pastry', this)">Pastry</button>
+      <button class="filter-btn" onclick="filterProducts('spesial', this)">Spesial</button>
+    </div>
+  </div>
+  <div class="products-grid" id="products-grid"></div>
+</section>
+
+<!-- FEATURED -->
+<section id="featured">
+  <div class="featured-inner">
+    <div>
+      <p class="featured-tag">Andalan Bulan Ini</p>
+      <h2 class="featured-title">Sourdough<br><em>Istimewa</em> 72 Jam</h2>
+      <p class="featured-desc">Roti andalan kami yang telah melewati fermentasi panjang 72 jam. Kerak renyah, remah lembut dengan rasa sedikit asam yang memikat. Tersedia terbatas setiap akhir pekan.</p>
+      <div class="featured-price">Rp 85.000 <span>Rp 110.000</span></div>
+      <button class="btn-gold" onclick="addToCartById(9)">Tambah ke Keranjang</button>
+    </div>
+    <div class="featured-visual">
+      <div class="bread-circle">🍞</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="testimonials-header">
+    <p class="section-tag">Kata Mereka</p>
+    <h2 class="section-title">Pelanggan <em>Setia</em> Kami</h2>
+    <p class="section-desc">Lebih dari dua ribu keluarga telah merasakan kelezatan roti La Farine. Ini sebagian cerita mereka.</p>
+  </div>
+  <div class="reviews-grid" id="reviews-grid"></div>
+</section>
+
+<!-- ORDER -->
+<section id="order">
+  <div class="order-grid">
+    <div class="order-info">
+      <p class="section-tag">Pesan Sekarang</p>
+      <h2 class="section-title">Antar ke <em>Pintu</em> Rumahmu</h2>
+      <p class="section-desc">Pesan hari ini, terima roti segar esok pagi. Kami melayani pengiriman di seluruh area Palangkaraya dengan jaminan roti masih hangat saat tiba.</p>
+      <div class="order-benefits">
+        <div class="benefit-item">
+          <div class="benefit-icon">🚀</div>
+          <div>
+            <div class="benefit-title">Pengiriman Cepat</div>
+            <div class="benefit-desc">Estimasi 2-3 jam setelah konfirmasi pesanan</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">📦</div>
+          <div>
+            <div class="benefit-title">Kemasan Terjaga</div>
+            <div class="benefit-desc">Dikemas khusus agar roti tetap segar dan tidak remuk</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">💳</div>
+          <div>
+            <div class="benefit-title">Bayar Mudah</div>
+            <div class="benefit-desc">Transfer bank, QRIS, atau bayar di tempat (COD)</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🎁</div>
+          <div>
+            <div class="benefit-title">Gratis Ongkir</div>
+            <div class="benefit-desc">Gratis ongkos kirim untuk pembelian min. Rp 100.000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="order-form-wrap reveal">
+      <h3 class="form-title">Form Pemesanan</h3>
+      <div id="order-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nama Lengkap *</label>
+            <input class="form-input" type="text" id="f-name" placeholder="John Doe" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nomor WhatsApp *</label>
+            <input class="form-input" type="tel" id="f-phone" placeholder="08xxxxxxxxx" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="f-email" placeholder="email@example.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Alamat Pengiriman *</label>
+          <input class="form-input" type="text" id="f-address" placeholder="Jl. Contoh No. 123, Palangkaraya" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Produk yang Dipesan *</label>
+            <select class="form-select" id="f-product">
+              <option value="">— Pilih Produk —</option>
+              <option>Sourdough 72 Jam - Rp 85.000</option>
+              <option>Croissant Butter - Rp 28.000</option>
+              <option>Roti Tawar Premium - Rp 32.000</option>
+              <option>Baguette Klasik - Rp 24.000</option>
+              <option>Cinnamon Roll - Rp 25.000</option>
+              <option>Choco Brioche - Rp 35.000</option>
+              <option>Paket Mix (10 pcs) - Rp 175.000</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jumlah</label>
+            <input class="form-input" type="number" id="f-qty" min="1" value="1" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Metode Pembayaran</label>
+          <select class="form-select" id="f-payment">
+            <option>Transfer Bank (BCA/Mandiri/BRI)</option>
+            <option>QRIS</option>
+            <option>COD (Bayar di Tempat)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Catatan Tambahan</label>
+          <textarea class="form-textarea" id="f-notes" placeholder="Misalnya: tidak pakai biji wijen, minta extra crispy, dll."></textarea>
+        </div>
+        <button class="submit-btn" onclick="submitOrder()">📋 Kirim Pesanan via WhatsApp</button>
+      </div>
+      <div class="form-success" id="form-success">
+        <div class="checkmark">✅</div>
+        <h3 style="font-family:'Playfair Display',serif;color:var(--brown-deep);margin-bottom:0.5rem">Pesanan Terkirim!</h3>
+        <p>Kami akan menghubungi kamu via WhatsApp dalam 5-10 menit untuk konfirmasi.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CART SIDEBAR -->
+<div id="cart-overlay" onclick="toggleCart()"></div>
+<div id="cart-sidebar">
+  <div class="cart-header">
+    <h2>Keranjang</h2>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total</span>
+      <span id="cart-total-price">Rp 0</span>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">Lanjut Checkout via WA</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">La <span>Farine</span></a>
+      <p>Roti artisan segar dipanggang setiap pagi. Dibuat dengan cinta, bahan pilihan, dan teknik tradisional turun-temurun.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link" title="Instagram">📷</a>
+        <a href="#" class="social-link" title="WhatsApp">💬</a>
+        <a href="#" class="social-link" title="Facebook">👍</a>
+        <a href="#" class="social-link" title="TikTok">🎵</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Menu</h4>
+      <ul>
+        <li><a href="#menu">Roti Artisan</a></li>
+        <li><a href="#menu">Kue & Pastry</a></li>
+        <li><a href="#menu">Paket Hemat</a></li>
+        <li><a href="#featured">Produk Spesial</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Informasi</h4>
+      <ul>
+        <li><a href="#about">Tentang Kami</a></li>
+        <li><a href="#order">Cara Pemesanan</a></li>
+        <li><a href="#">Kebijakan Pengiriman</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Kontak</h4>
+      <ul>
+        <li><a href="tel:+6281234567890">+62 812-3456-7890</a></li>
+        <li><a href="mailto:hello@lafarine.id">hello@lafarine.id</a></li>
+        <li><a href="#">Jl. Ahmad Yani No. 45</a></li>
+        <li><a href="#">Palangkaraya, Kalteng</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 La Farine. All rights reserved.</span>
+    <span>Buka Setiap Hari 06.00 – 20.00 WIB</span>
+  </div>
+</footer>
+
+<script>
+  // ── CURSOR ──
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  });
+
+  // ── NAVBAR SCROLL ──
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── MOBILE MENU ──
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+
+  // ── PRODUCTS DATA ──
+  const products = [
+    { id:1, name:'Sourdough Klasik', emoji:'🍞', category:'roti', price:55000, desc:'Fermentasi alami 18 jam, kerak renyah, remah lembut', badge:null },
+    { id:2, name:'Croissant Butter', emoji:'🥐', category:'pastry', price:28000, desc:'Lapisan puff pastry dengan mentega premium Prancis', badge:'Bestseller' },
+    { id:3, name:'Roti Tawar Premium', emoji:'🍔', category:'roti', price:32000, desc:'Lembut, fluffy, cocok untuk sarapan keluarga', badge:null },
+    { id:4, name:'Cinnamon Roll', emoji:'🌀', category:'kue', price:25000, desc:'Gulungan kayu manis dengan glazing krim vanilla', badge:'Favorit' },
+    { id:5, name:'Baguette Klasik', emoji:'🥖', category:'roti', price:24000, desc:'Roti Prancis panjang, renyah di luar, lembut di dalam', badge:null },
+    { id:6, name:'Choco Brioche', emoji:'🍫', category:'kue', price:35000, desc:'Brioche kaya mentega dengan isian cokelat Belgia', badge:'Baru' },
+    { id:7, name:'Almond Tart', emoji:'🥧', category:'kue', price:45000, desc:'Tart dengan frangipane almond dan buah musiman', badge:null },
+    { id:8, name:'Pain au Chocolat', emoji:'🍩', category:'pastry', price:30000, desc:'Pastry berlapis dengan batang cokelat di tengahnya', badge:'Bestseller' },
+    { id:9, name:'Sourdough 72 Jam', emoji:'🍞', category:'spesial', price:85000, desc:'Fermentasi panjang 72 jam, rasa komplex dan unik', badge:'Limited' },
+    { id:10, name:'Focaccia Herbal', emoji:'🌿', category:'roti', price:40000, desc:'Roti Italia dengan rosemary, thyme, dan olive oil', badge:null },
+    { id:11, name:'Éclair Vanilla', emoji:'🍮', category:'kue', price:32000, desc:'Choux pastry dengan krim vanilla dan glasur cokelat', badge:'Baru' },
+    { id:12, name:'Whole Wheat Loaf', emoji:'🌾', category:'roti', price:38000, desc:'Roti gandum utuh kaya serat, sehat dan mengenyangkan', badge:null },
+  ];
+
+  // ── CART STATE ──
+  let cart = JSON.parse(localStorage.getItem('lafarine_cart') || '[]');
+
+  function saveCart() { localStorage.setItem('lafarine_cart', JSON.stringify(cart)); }
+
+  function updateCartUI() {
+    const total = cart.reduce((s, i) => s + i.qty, 0);
+    document.getElementById('cart-badge').textContent = total;
+    const itemsEl = document.getElementById('cart-items');
+    const totalPrice = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    document.getElementById('cart-total-price').textContent = 'Rp ' + totalPrice.toLocaleString('id-ID');
+
+    if (cart.length === 0) {
+      itemsEl.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Keranjang masih kosong.<br>Yuk pilih roti favoritmu!</p></div>`;
+      return;
+    }
+    itemsEl.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-img">${item.emoji}</div>
+        <div style="flex:1">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">Rp ${(item.price).toLocaleString('id-ID')}</div>
+          <div class="cart-qty">
+            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕ Hapus</button>
+      </div>
+    `).join('');
+  }
+
+  function addToCart(product) {
+    const existing = cart.find(i => i.id === product.id);
+    if (existing) existing.qty++;
+    else cart.push({ ...product, qty: 1 });
+    saveCart(); updateCartUI();
+    showToast(`${product.emoji} ${product.name} ditambahkan!`);
+  }
+
+  function addToCartById(id) {
+    const product = products.find(p => p.id === id);
+    if (product) addToCart(product);
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+    saveCart(); updateCartUI();
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(i => i.id !== id);
+    saveCart(); updateCartUI();
+  }
+
+  function toggleCart() {
+    document.getElementById('cart-overlay').classList.toggle('open');
+    document.getElementById('cart-sidebar').classList.toggle('open');
+    updateCartUI();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = '🛒 ' + msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── RENDER PRODUCTS ──
+  function renderProducts(filter = 'all') {
+    const grid = document.getElementById('products-grid');
+    const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+    grid.innerHTML = filtered.map(p => `
+      <div class="product-card reveal" data-category="${p.category}">
+        <div class="product-img" style="background:${getGradient(p.category)}">
+          <span style="font-size:3.5rem;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.2))">${p.emoji}</span>
+          ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+        </div>
+        <div class="product-info">
+          <div class="product-name">${p.name}</div>
+          <div class="product-desc">${p.desc}</div>
+          <div class="product-footer">
+            <div class="product-price">Rp ${p.price.toLocaleString('id-ID')}</div>
+            <button class="add-cart-btn" id="btn-${p.id}" onclick="handleAddToCart(${p.id}, this)">+ Keranjang</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    observeReveal();
+  }
+
+  function getGradient(cat) {
+    const map = {
+      roti: 'linear-gradient(135deg,#E8C89A,#C8922A)',
+      kue: 'linear-gradient(135deg,#F5C1BB,#D4736A)',
+      pastry: 'linear-gradient(135deg,#E8D8A0,#C8A030)',
+      spesial: 'linear-gradient(135deg,#A8C8A0,#4A7C59)',
+    };
+    return map[cat] || map.roti;
+  }
+
+  function handleAddToCart(id, btn) {
+    addToCartById(id);
+    btn.textContent = '✓ Ditambahkan';
+    btn.classList.add('added');
+    setTimeout(() => { btn.textContent = '+ Keranjang'; btn.classList.remove('added'); }, 2000);
+  }
+
+  function filterProducts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProducts(cat);
+  }
+
+  // ── REVIEWS DATA ──
+  const reviews = [
+    { name:'Sari W.', text:'Sourdough-nya luar biasa! Kerak renyah sempurna, remah lembut, dan aromanya bikin nagih. Sekarang jadi langganan tetap tiap Sabtu pagi.', stars:'★★★★★', initials:'SW' },
+    { name:'Budi P.', text:'Croissant-nya benar-benar crispy di luar tapi lumer di dalam. Saya sudah coba banyak toko roti, La Farine yang terbaik sejauh ini!', stars:'★★★★★', initials:'BP' },
+    { name:'Diana M.', text:'Pelayanannya ramah, pengirimannya tepat waktu, dan rotinya masih hangat sampai rumah. Paket keluarga sangat worth it!', stars:'★★★★☆', initials:'DM' },
+    { name:'Reza F.', text:'Cinnamon roll-nya wow banget! Glasingnya tidak terlalu manis, gulungan kayumanisnya pas. Anak-anak saya langsung rebutan.', stars:'★★★★★', initials:'RF' },
+    { name:'Ayu N.', text:'Saya pesan untuk hadiah ulang tahun teman, mereka senang sekali! Kemasannya cantik dan rotinya enak. Recommended!', stars:'★★★★★', initials:'AN' },
+    { name:'Hendra S.', text:'Focaccia herbalnya otentik banget! Rosemary fresh, tekstur moist sempurna. Selalu beli 2 loaf setiap minggu.', stars:'★★★★★', initials:'HS' },
+  ];
+
+  document.getElementById('reviews-grid').innerHTML = reviews.map((r, i) => `
+    <div class="review-card reveal reveal-delay-${(i%4)+1}">
+      <div class="review-quote">"</div>
+      <p class="review-text">${r.text}</p>
+      <div class="review-author">
+        <div class="review-avatar">${r.initials}</div>
+        <div>
+          <div class="review-name">${r.name}</div>
+          <div class="review-stars">${r.stars}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // ── ORDER FORM ──
+  function submitOrder() {
+    const name = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const address = document.getElementById('f-address').value.trim();
+    const product = document.getElementById('f-product').value;
+    const qty = document.getElementById('f-qty').value;
+    const payment = document.getElementById('f-payment').value;
+    const notes = document.getElementById('f-notes').value.trim();
+
+    if (!name || !phone || !address || !product) {
+      showToast('⚠️ Lengkapi semua field yang wajib!');
+      return;
+    }
+
+    // Build WhatsApp message
+    const msg = encodeURIComponent(
+      `🍞 *Pesanan La Farine*\n\n` +
+      `👤 Nama: ${name}\n` +
+      `📱 WA: ${phone}\n` +
+      `🏠 Alamat: ${address}\n` +
+      `🛒 Produk: ${product}\n` +
+      `📦 Jumlah: ${qty}\n` +
+      `💳 Pembayaran: ${payment}\n` +
+      (notes ? `📝 Catatan: ${notes}\n` : '') +
+      `\nTerima kasih! 🙏`
+    );
+
+    window.open(`https://wa.me/6281234567890?text=${msg}`, '_blank');
+
+    document.getElementById('order-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+
+  // ── CHECKOUT ──
+  function checkout() {
+    if (cart.length === 0) { showToast('Keranjang kosong!'); return; }
+    const items = cart.map(i => `- ${i.name} x${i.qty} = Rp ${(i.price*i.qty).toLocaleString('id-ID')}`).join('\n');
+    const total = cart.reduce((s,i) => s + i.price*i.qty, 0);
+    const msg = encodeURIComponent(
+      `🍞 *Order La Farine*\n\n${items}\n\n*Total: Rp ${total.toLocaleString('id-ID')}*\n\nMohon konfirmasi pemesanan saya. Terima kasih!`
+    );
+    window.open(`https://wa.me/6281234567890?text=${msg}`, '_blank');
+  }
+
+  // ── SCROLL REVEAL ──
+  function observeReveal() {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }
+
+  // ── INIT ──
+  renderProducts();
+  updateCartUI();
+  observeReveal();
+</script>
+</body>
+</html>
