@@ -1,59 +1,91 @@
-# La Farine — Website Toko Roti Artisan
+# 🍞 La Farine — Website Toko Roti Artisan
 
-Website modern untuk toko roti artisan, dibangun sebagai static HTML siap deploy ke Vercel.
+Website modern untuk toko roti artisan **La Farine**, dibangun dengan HTML, CSS, dan JavaScript murni tanpa framework. Desain warm & elegan dengan nuansa artisan bakery Prancis.
 
-## Fitur Lengkap
+---
 
-- 🏠 **Hero Section** — Animasi halus, visual SVG roti, CTA yang kuat
-- 🎠 **Marquee Banner** — Infinite scroll highlight produk
-- 📖 **About Section** — Kisah toko, statistik, keunggulan
-- 🛒 **Toko / Menu** — 12 produk, filter kategori, tambah ke keranjang
-- ⭐ **Produk Unggulan** — Banner spesial sourdough dengan CTA
-- 💬 **Testimonial** — 6 ulasan pelanggan dengan animasi
-- 📋 **Form Pemesanan** — Langsung kirim ke WhatsApp
-- 🛍️ **Keranjang Belanja** — Sidebar dengan localStorage, ubah qty, checkout ke WA
-- 📱 **Fully Responsive** — Mobile & desktop
-- ✨ **Custom Cursor** — Animasi cursor unik
-- 🌊 **Scroll Reveal** — Animasi elemen saat scroll
-- 🎨 **Desain Artisan** — Palet warm, Playfair Display + Lato
+## ✨ Fitur-Fitur Website
 
-## Cara Deploy ke Vercel
+### 🏠 Hero Section
+Landing page dengan animasi masuk yang halus, ilustrasi SVG roti hand-crafted, tagline yang kuat, dan dua tombol CTA — *Lihat Menu* dan *Pesan Sekarang*.
 
-### Opsi 1: Drag & Drop (Termudah)
-1. Buka [vercel.com](https://vercel.com) dan login
-2. Klik **"Add New Project"**
-3. Drag folder `toko-roti` ke browser
-4. Klik **Deploy** — selesai! 🎉
+### 🎠 Marquee Banner
+Banner teks berjalan otomatis dan infinite yang menampilkan highlight produk dan keunggulan toko (tepung pilihan, bahan lokal, dipanggang segar, dll).
 
-### Opsi 2: GitHub
-1. Upload folder ini ke repo GitHub baru
-2. Di Vercel, klik **"Import Git Repository"**
-3. Pilih repo, klik **Deploy**
+### 📖 About / Tentang Kami
+Section kisah toko dengan ilustrasi oven, 4 poin keunggulan produk, dan statistik toko: 15+ tahun berdiri, 40+ varian roti, 2000+ pelanggan, rating 4.9 bintang.
 
-### Opsi 3: Vercel CLI
-```bash
-npm i -g vercel
-cd toko-roti
-vercel
-```
+### 🛒 Menu & Katalog Produk
+- 12 produk lengkap dengan nama, deskripsi, harga, dan emoji visual
+- Filter kategori: **Semua / Roti / Kue / Pastry / Spesial**
+- Badge khusus produk: *Bestseller*, *Favorit*, *Baru*, *Limited*
+- Tombol **Tambah ke Keranjang** dengan animasi konfirmasi
 
-## Kustomisasi
+### ⭐ Featured / Produk Unggulan
+Banner highlight khusus untuk produk andalan bulan ini — Sourdough 72 Jam — dengan tampilan harga coret dan tombol beli langsung.
 
-Edit `index.html`:
+### 💬 Testimoni Pelanggan
+6 ulasan pelanggan dengan avatar, nama, bintang rating, dan animasi muncul saat di-scroll.
 
-| Hal | Cara Edit |
-|-----|-----------|
-| Nama toko | Cari `La Farine`, ganti semua |
-| Nomor WA | Cari `6281234567890`, ganti |
-| Produk | Edit array `products` di `<script>` |
-| Warna | Edit variabel CSS di `:root` |
-| Alamat | Edit di section footer |
+### 📋 Form Pemesanan
+Form order lengkap dengan field: nama, nomor WA, email, alamat, pilihan produk, jumlah, metode pembayaran (Transfer/QRIS/COD), dan catatan tambahan. Setelah submit, pesanan otomatis dikirim ke **WhatsApp** pemilik toko dalam format pesan yang rapi.
 
-## Struktur File
+### 🛍️ Keranjang Belanja (Cart Sidebar)
+- Slide-in dari kanan saat diklik
+- Tambah / kurangi / hapus item
+- Hitung total harga otomatis
+- Data tersimpan di `localStorage` — tidak hilang saat refresh
+- Tombol checkout kirim ringkasan order ke WhatsApp
+
+### 🔔 Toast Notification
+Notifikasi pop-up di bawah layar setiap kali produk berhasil ditambahkan ke keranjang.
+
+### 🖱️ Custom Cursor
+Cursor kustom berbentuk titik emas dengan lingkaran, berubah warna dan membesar saat hover di atas link atau tombol.
+
+### 📱 Fully Responsive
+Tampilan menyesuaikan otomatis untuk semua ukuran layar — desktop, tablet, dan mobile. Navbar berubah jadi hamburger menu di layar kecil.
+
+### 🌊 Scroll Reveal Animation
+Elemen-elemen halaman muncul dengan animasi fade-in yang smooth saat pengguna scroll ke bawah.
+
+---
+
+## 🎨 Desain
+
+| Elemen | Detail |
+|--------|--------|
+| **Palet Warna** | Krem, cokelat deep, emas, dan aksen rose |
+| **Font Judul** | Playfair Display (serif elegan) |
+| **Font Body** | Lato (bersih & mudah dibaca) |
+| **Font Logo** | Dancing Script (kaligrafi) |
+| **Tema** | Warm artisan bakery, terinspirasi boulangerie Prancis |
+
+---
+
+## 📁 Struktur File
 
 ```
 toko-roti/
-├── index.html      ← Semua halaman (HTML + CSS + JS)
-├── vercel.json     ← Konfigurasi Vercel
-└── README.md       ← Dokumentasi ini
+├── index.html      ← Struktur halaman (HTML)
+├── style.css       ← Semua styling & animasi (CSS)
+├── main.js         ← Logika keranjang, produk, form (JS)
+├── vercel.json     ← Konfigurasi deploy Vercel
+├── README.md       ← Dokumentasi ini
+└── public/         ← Folder aset (gambar, ikon, dll)
 ```
+
+---
+
+## ⚙️ Kustomisasi
+
+Edit langsung di file yang sesuai:
+
+| Yang Ingin Diubah | File | Yang Dicari |
+|---|---|---|
+| Nama toko | `index.html` + `main.js` | `La Farine` |
+| Nomor WhatsApp | `main.js` | `6281234567890` |
+| Daftar produk & harga | `main.js` | array `products` |
+| Warna tema | `style.css` | variabel `:root` |
+| Teks alamat & kontak | `index.html` | section `footer` |
+| Data testimoni | `main.js` | array `reviews` |
